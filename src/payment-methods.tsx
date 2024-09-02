@@ -1,11 +1,5 @@
 import { OrderStepsAction } from "./App";
 
-// type PaymentMethodsType = {
-//   id: number;
-//   titulo: string;
-//   descricao: string;
-// };
-
 interface PaymentMethodsProps {
   dispath: (action: OrderStepsAction) => void;
 }

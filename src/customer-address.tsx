@@ -56,7 +56,10 @@ export function CustomerAddress({ dispath }: CustomerAddressProps) {
   }, [selectedAddress]);
 
   return (
-    <>
+    <div>
+      <h2 className="mb-3 uppercase text-xs font-bold text-gray-500">
+        Seu endereço
+      </h2>
       <div className="grid grid-cols-2 gap-3">
         {customerAddress.map((address) => (
           <div
@@ -78,6 +81,6 @@ export function CustomerAddress({ dispath }: CustomerAddressProps) {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 }
