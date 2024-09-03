@@ -1,16 +1,7 @@
 import { useEffect, useState } from "react";
-
-import { OrderStepsAction } from "./App";
-
-export type CustomerAddressType = {
-  id: number;
-  endereco: string;
-  uf: string;
-  bairro: string;
-  numero: number;
-  cep: string;
-  cidade: string;
-};
+import { useNavigate } from "react-router-dom";
+import { CustomerAddressType } from "./context/types";
+import { useFinalizeOrderSteps } from "./context/OrderStepsContext";
 
 const customerAddress: CustomerAddressType[] = [
   {
@@ -42,23 +33,21 @@ const customerAddress: CustomerAddressType[] = [
   },
 ];
 
-interface CustomerAddressProps {
-  dispath: (action: OrderStepsAction) => void;
-}
-
-export function CustomerAddress({ dispath }: CustomerAddressProps) {
+export function CustomerAddress() {
   const [selectedAddress, setSelectedAddress] = useState<number>(0);
-
+  const { state, setAddress } = useFinalizeOrderSteps();
+  const navigate = useNavigate();
+  
   useEffect(() => {
     if (selectedAddress !== 0) {
-      dispath({ type: "SET_ADDRESS_ID", payload: selectedAddress });
+      setAddress(selectedAddress);
     }
   }, [selectedAddress]);
 
   return (
     <div>
       <h2 className="mb-3 uppercase text-xs font-bold text-gray-500">
-        Seu endereço
+        Selecione o endereço
       </h2>
       <div className="grid grid-cols-2 gap-3">
         {customerAddress.map((address) => (
@@ -66,7 +55,7 @@ export function CustomerAddress({ dispath }: CustomerAddressProps) {
             onClick={() => setSelectedAddress(address.id)}
             key={address.id}
             className={`p-3 h-auto rounded-lg text-gray-500 text-base cursor-pointer ${
-              selectedAddress === address.id
+              state.addressId === address.id
                 ? "bg-cyan-700 text-white"
                 : "bg-gray-100"
             }`}
@@ -81,6 +70,13 @@ export function CustomerAddress({ dispath }: CustomerAddressProps) {
           </div>
         ))}
       </div>
+      <button
+        onClick={() => navigate("/pagamento")}
+        disabled={state.addressId === 0}
+        className={`bg-cyan-700 h-10 w-full mt-3 text-white font-semibold uppercase rounded-md disabled:bg-opacity-70 disabled:cursor-not-allowed`}
+      >
+        Continuar
+      </button>
     </div>
   );
 }

@@ -1,12 +1,28 @@
-import { OrderStepsAction } from "./App";
+import { useEffect, useState } from "react";
 
-interface PaymentMethodsProps {
-  dispath: (action: OrderStepsAction) => void;
-}
+import { useFinalizeOrderSteps } from "./context/OrderStepsContext";
+import { useNavigate } from "react-router-dom";
 
-export function PaymentMethods({ dispath }: PaymentMethodsProps) {
+type paymentMethods = "PIX" | "BOLETO" | "CREDITO" | "DEBITO";
+
+export function PaymentMethods() {
+  const [paymentMethod, setPaymentMethod] = useState();
+  const navigate = useNavigate();
+  const { setPaymentResult, state } = useFinalizeOrderSteps();
+  const handlePaymentMethod = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    if (value !== "") {
+      setPaymentResult(true);
+    }
+  };
+
+  useEffect(() => {
+    if (state.addressId !== 0 && state.payment === true) {
+      navigate("/concluido");
+    }
+  }, [state]);
   return (
-    <div className="">
+    <div>
       <label
         htmlFor="payment-methods"
         className="uppercase text-xs font-bold text-gray-500"
@@ -14,15 +30,10 @@ export function PaymentMethods({ dispath }: PaymentMethodsProps) {
         Pague com
       </label>
       <select
+        onChange={(e) => handlePaymentMethod(e)}
         name=""
         id="payment-methods"
         className="w-full h-11 border rounded-md outline-none"
-        onChange={(e) =>
-          dispath({
-            type: "SET_PAYMENT_METHOD",
-            payload: e.target.value !== "" ? parseInt(e.target.value) : 0,
-          })
-        }
       >
         <option value="">Selecione a forma de Pagamento</option>
         <option value="1">PIX</option>
