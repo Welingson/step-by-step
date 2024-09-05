@@ -7,7 +7,8 @@ export type OrderSteps = {
 export type OrderStepsAction =
   | { type: "SET_PAYMENT_RESULT"; payload: boolean }
   | { type: "SET_PAYMENT_METHOD"; payload: number }
-  | { type: "SET_ADDRESS_ID"; payload: number };
+  | { type: "SET_ADDRESS_ID"; payload: number }
+  | { type: "SET_INITIAL_STATE"; payload: boolean };
 
 export type CustomerAddressType = {
   id: number;

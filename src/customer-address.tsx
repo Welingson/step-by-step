@@ -71,7 +71,7 @@ export function CustomerAddress() {
         ))}
       </div>
       <button
-        onClick={() => navigate("/pagamento")}
+        onClick={() => navigate("/pedido/finalizar/pagamento")}
         disabled={state.addressId === 0}
         className={`bg-cyan-700 h-10 w-full mt-3 text-white font-semibold uppercase rounded-md disabled:bg-opacity-70 disabled:cursor-not-allowed`}
       >

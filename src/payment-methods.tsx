@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { useFinalizeOrderSteps } from "./context/OrderStepsContext";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 type paymentMethods = "PIX" | "BOLETO" | "CREDITO" | "DEBITO";
 
@@ -16,11 +16,10 @@ export function PaymentMethods() {
     }
   };
 
-  useEffect(() => {
-    if (state.addressId !== 0 && state.payment === true) {
-      navigate("/concluido");
-    }
-  }, [state]);
+  if (state.addressId === 0) {
+    return <Navigate to={"/pedido/finalizar"} />;
+  }
+
   return (
     <div>
       <label

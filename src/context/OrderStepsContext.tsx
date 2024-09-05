@@ -1,4 +1,4 @@
-import { useContext, createContext, useReducer } from "react";
+import { useContext, createContext, useReducer, useEffect } from "react";
 
 import {
   FinalizeOrderContextType,
@@ -24,6 +24,8 @@ const orderStepsReducer = (
       return { ...state, paymentMethod: action.payload };
     case "SET_PAYMENT_RESULT":
       return { ...state, payment: action.payload };
+    case "SET_INITIAL_STATE":
+      return { ...state, addressId: 0, payment: false, paymentMethod: 0 };
   }
 };
 
@@ -49,6 +51,13 @@ export const FinalizeOrderStepsContextProvider = ({
     dispath({ type: "SET_PAYMENT_RESULT", payload: paymentResult });
   };
 
+  useEffect(() => {
+    if (state.addressId !== 0 && state.payment) {
+      console.log("Faz uma requisição cadastrando o pedido");
+      dispath({ type: "SET_INITIAL_STATE", payload: false });
+    }
+  }, [state]);
+
   return (
     <FinalizeOrderStepsContext.Provider
       value={{ state, setAddress, setPaymentResult }}
@@ -58,11 +67,13 @@ export const FinalizeOrderStepsContextProvider = ({
   );
 };
 
-export const useFinalizeOrderSteps = ():FinalizeOrderContextType =>{
-  const context = useContext(FinalizeOrderStepsContext)
+export const useFinalizeOrderSteps = (): FinalizeOrderContextType => {
+  const context = useContext(FinalizeOrderStepsContext);
   if (!context) {
-    throw new Error("useFinalizeOrderSteps must be used within an FinalizeOrderProvider.");
+    throw new Error(
+      "useFinalizeOrderSteps must be used within an FinalizeOrderProvider."
+    );
   }
 
-  return context
-}
+  return context;
+};
